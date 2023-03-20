@@ -1,0 +1,36 @@
+@PostMapping("/stories")
+    public ResponseEntity<Story_Entity> createStory(@RequestBody Story_Entity storyEntity){
+        return new ResponseEntity<Story_Entity>(storyService.createStory(storyEntity),HttpStatus.CREATED);
+    }
+
+
+    @GetMapping("/stories/{story_id}")
+    public User_Entity getUser(@PathVariable(name = "story_id") String storyId){
+        Optional<Story_Entity> s = storyRepository.findById(storyId);
+        if(s.isPresent()){
+            return s.get().getUserEntity();
+        }
+        return null;
+    }
+
+
+
+
+
+
+
+public List<Story_Entity> getStoriesForUser(String username) {
+        try {
+            return storyRepository.findStoriesByUsername(username);
+        } catch (Exception e){
+            return Collections.emptyList();
+        }
+    }
+
+
+
+
+
+
+@Query("SELECT s FROM Story_Entity s WHERE s.userEntity.user_name = :username")
+    List<Story_Entity> findStoriesByUsername(@Param("username") String username);
